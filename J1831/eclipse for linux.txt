@@ -1,0 +1,15 @@
+https://www.eclipse.org/downloads/packages/
+
+# wget http://mirrors.neusoft.edu.cn/eclipse/technology/epp/downloads/release/2020-03/R/eclipse-committers-2020-03-R-linux-gtk-x86_64.tar.gz
+# tar -zxf eclipse-committers-2020-03-R-linux-gtk-x86_64.tar.gz -C /opt
+# touch /usr/share/applications/eclipse.desktop
+[Desktop Entry]
+Encoding=UTF-8
+Name=Eclipse 4.5.0
+Comment=Eclipse Mars
+Exec=/opt/eclipse/eclipse
+Icon=/opt/eclipse/icon.xpm
+Categories=Application;Development;Java;IDE
+Version=1.0
+Type=Application
+Terminal=0

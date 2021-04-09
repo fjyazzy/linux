@@ -1,0 +1,26 @@
+1. 在数据库中建立一个表admin
+Create table admin (id int,usename varchar(50),userpassword varchar(50))
+在表里面存放用户名和帐号。
+2. 把access的数据库支持包ucanaccesss-5.XXXX.jar拷贝机进web_inf/lib目录中。
+3. View部分不变(login.jsp,successs.jap,failure.jsp)
+4. Controller部分不变 (struts.xml)
+5. 调整model部分，把原来不访问数据库的功能，改为访问数据库。
+   LoginAction.java
+=================人生目标===========
+1. struts2 环境
+2. sql
+3. servlet
+4. jsp
+5. html，css,jquery,js
+6. java
+7. mvc
+===================================
+
+
+
+
+
+
+
+
+

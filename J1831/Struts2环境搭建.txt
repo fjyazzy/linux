@@ -1,0 +1,35 @@
+程序员开发的技术路线
+======================================
+1. 微软的.net技术路线 （老师下岗，对MS依赖性太强）
+   优点：简单，易学，入门容易，构建简单
+   缺点：环境配置复杂，可重用性不高，
+         深度开发难，平台依赖性高  
+
+2. JAVA的 MVC路线(struts2)
+   优点： 环境配置简单，可重用性高，
+          深度开发容易，无平台依赖性，论坛社区资源丰富
+   缺点： 入门难
+
+===========================
+struts2环境搭建
+==========================
+1. 构建"dynamic web project" 动态web站点，要生成web.xml。
+2. 把struts2 lib目录下的库（不是所有的库）拷贝到web_info/lib目录下。
+3. 在web.xml中配置过滤器
+<filter>
+	<filter-name>struts2</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter</filter-class>
+</filter>
+<filter-mapping>
+	<filter-name>struts2</filter-name>
+	<url-pattern>/*</url-pattern>
+</filter-mapping>
+4. 构建view  ，写一个带有form的html页面，action提交给struts.xml
+5. 在scr目录下，建立struts.xml
+	<action name="login" class="fjsdxy.LoginAction" method="execute">
+		<result name="success">/success.jsp</result>
+		<result name="error">/failure.jsp</result>
+	</action>
+6.构建LoginAction类，success.jsp，failure.jsp
+
+

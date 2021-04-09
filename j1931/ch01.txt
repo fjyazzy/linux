@@ -1,0 +1,5 @@
+1、安装vmware软件
+2、新建虚拟机
+3、安装centos7操作系统，centos 7 下载地址：
+======================
+http://mirrors.aliyun.com/centos/7/isos/x86_64/CentOS-7-x86_64-DVD-2009.iso

@@ -1,0 +1,18 @@
+实训二：存储和文件管理
+实训任务：
+1、在虚拟机上添加一块新的20G SCSI硬盘
+2、对新的硬盘进行分区，分别为5G、5G和10G
+3、对三个分区进行格式化
+4、将三个分区分别挂载到/mnt/drva，/mnt/drvb,/mnt/drvc目录下
+5、在/mnt/drva目录下，新建目录 mua,mub
+6、在目录mua下，建立目录muc
+7、在目录mub下，新建一个空文件test.txt
+8、利用vi命令，编辑test.txt，输入下面的内容，并保存。
+
+echo "# linux" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/fjyazzy/linux.git
+git push -u origin main

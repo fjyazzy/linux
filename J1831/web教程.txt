@@ -1,0 +1,16 @@
+1. yum install httpd       ###安装服务器
+2. 编辑 /etc/httpd/conf/httpd.conf
+3. systemctl start httpd   ###启动服务器
+4. systemctl stop firewalld.service   ##关闭防火墙
+5. 访问： http://192.168.190.142/
+6. 在/var/www/html  文件中放入index.html
+7. chmod 777 *    ###设置权限
+8. 访问网站： http://192.168.190.142/
+
+============================
+1.yum search java |grep JDK  ##检索可安装的JDK包
+2.yum install java-1.8.0-openjdk-devel.x86_64   ##安装JDK开发包
+
+3.yum install tomcat tomcat-webapps tomcat-admin-webapps ##安装tomcat管理
+4.systemctl start tomcat
+5. 访问网站： http://192.168.190.142:8080/
