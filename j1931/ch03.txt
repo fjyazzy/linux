@@ -1,0 +1,97 @@
+实训三：Shell脚本编写及运行
+实训任务：
+
+任务一.编写一个名为myfirstshell.sh的脚本，它包括以下内容。
+
+a) 包含一段注释，列出您的姓名、脚本的名称和编写这个脚本的目的。
+b) 问候用户。
+c) 显示日期和时间。
+d) 显示这个月的日历。
+e) 显示您的机器名。
+f) 显示当前这个操作系统的名称和版本。
+g) 显示父目录中的所有文件的列表。
+h) 显示root正在运行的所有进程。
+i) 显示变量TERM、PATH和HOME的值。
+j) 显示磁盘使用情况。
+k) 用id命令打印出您的组ID。
+m) 跟用户说“Good bye”
+
+任务二：文件移动拷贝cp.sh， 实现以下内容：
+1）新建有m1.txt m2.txt m3.txt m4.txt，
+2）分别创建出对应的目录，m1 m2 m3 m4 并把文件移动到对应的目录下
+
+任务三： 编写一个显示菜单的shell程序，利用函数实现简单的菜单功能，n的值由键盘输入：
+** （1）计算1到n的奇数之和； **
+** （2）计算1到n的阶乘； **
+** （3）计算1到n的所有素数； **
+** （4）退出程序
+=========参考代码=====================
+#!/bin/bash
+#进入计算的循环
+#计算1到n的奇数之和
+function one(){
+    echo "-----开始计算1到n的奇数之和，请输入你想要计算到哪个数字-----"
+    read num
+    sum=0
+    for((i=1;i<=$num;i++))
+    do  
+        if [ $((i%2)) -ne 0 ];then
+        let "sum=$sum+$i"
+        fi
+    done
+    echo "计算结果为$sum"
+}
+function two(){
+    echo "-----开始计算1到n的阶乘，请输入你想要计算到哪个数字-----"
+    read num
+    sum=1
+    for((i=1;i<=$num;i++))
+    do  
+        let "sum=$sum*$i"
+    done
+    echo "计算结果为$sum"
+}
+function three(){
+    echo "-----开始计算1到n的所有素数，请输入你想要计算到哪个数字-----"
+    read num
+    declare -l a 
+    for((i=1;i<=$num;i++))
+    do 
+        for((j=1;j<=i;j++))
+        do 
+            b=$(( $i%$j ))
+            if [[ $b -eq 0 ]]; then
+                a=$a+1
+            fi
+        done
+        if [[ $a -eq 2 ]]; then
+            echo -n $i " "
+        fi
+        a=0
+    done
+    echo
+}
+#方便程序无线循环
+while ((flag=1))
+do
+    echo "-----请选择你要做的事情------"
+    echo "**    （1）计算1到n的奇数之和；       **"
+    echo "**    （2）计算1到n的阶乘；           **"
+    echo "**    （3）计算1到n的所有素数；       **"
+    echo "**    （4）退出程序。                 **"
+    read selected
+    case $selected in
+    1)
+        one;;
+    2)
+        two;;
+    3)
+        three;;
+    4) 
+        echo "正在退出程序..."
+        exit;;
+    esac
+done
+
+
+

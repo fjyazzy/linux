@@ -1,0 +1,59 @@
+1、最新版本的内核可以通过 https://www.kernel.org/ 网站获取
+
+2、下载最新稳定版本的内核源码包到 /usr/local/src ，并解压到当前目录
+wget .....
+
+3、解压内核源码包
+tar xf linux-5.2.11.tar.xz
+
+4、从 /boot 目录将现有版本的内核编译config配置文件拷过来到放到新的内核源码解压目录内并重命名为.config的隐藏文件
+[root@localhost src]# cd linux-5.2.11
+[root@localhost linux-5.2.11]# cp /boot/config-3.10.0-957.el7.x86_64 ./.config
+从boot目录拷贝原内核的config文件过来主要是为了方便，这个文件保存了在安装系统时内核所安装的模块配置信息（否则需要重新手动指定每一个模块的编译配置）。
+
+5、安装依赖包
+
+安装开发工具包组
+[root@localhost linux-5.2.11]# yum -y groupinstall "development tools"
+安装ncurse-devel包 （make menuconfig 文本界面窗口依赖包）
+[root@localhost linux-5.2.11]# yum -y install ncurses-devel
+
+6、运行 make menuconfig，开启文本界面的编译选项菜单窗口，可以对内核加载的模块编译选项进行调整，如修改编译后的内核名称、新添加之前系统缺少的模块等。
+修改内核名称：
+General setup --->local version -append to kernel release
+此处修改内核名称为 5.2.11-001.el7.x86_64
+新添加NTFS文件系统支持模块：
+
+File systems --->DOS/FAT/NT Filesystems --->NTFS file system support
+建议选择以模块方式(M选项)编译。（*号则是以静态方式编译打包进内核文件中，如果新添加的模块较多，会导致内核文件体积增大）
+
+7、编译内核
+
+[root@localhost linux-5.2.11]# make -j 4 #根据CPU核数开启多线程编译以加快编译速度
+开始漫长的编译过程，大概需要1-2小时左右，具体视CPU硬件的性能决定。
+
+如果编译开始提示错误，则可能需要预先安装对应的组件包,例如：
+
+[root@localhost linux-5.2.11]# yum -y install openssh-devel elfutils-libelf-devel bc
+根据对应的错误提示，yum 方式安装对应的组件包，部分组件包在epel源，所以需要预先配置好epel源仓库。
+
+8、编译安装模块
+
+编译完成后执行make modules_install 安装内核模块
+[root@localhost linux-5.2.11]# make modules_install
+
+9、安装内核核心文件
+[root@localhost linux-5.2.11]# make install
+reboot重启
+
+如需将新版本内核设置为默认启动内核，可以使用此命令
+
+grub2-set-default 0 #0表示 /boot/grub2/grub.cfg 文件中排在第一位的 menuentry 段
+
+重启进入系统后，查看一下内核版本，已经是最新的5.2.11版本
+
+[root@localhost ~]# uname -r
+
+5.2.11-001.el7.x86_64
+
+至此，整个内核的编译安装过程完成。
