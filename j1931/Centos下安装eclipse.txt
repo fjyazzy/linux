@@ -1,0 +1,53 @@
+1、在eclipse.org找到网址
+https://www.eclipse.org/downloads/packages/
+
+2、利用wget下载linux压缩包
+# wget http://mirrors.neusoft.edu.cn/eclipse/technology/epp/downloads/release/2020-03/R/eclipse-committers-2020-03-R-linux-gtk-x86_64.tar.gz
+
+3、解压程序包
+# tar -zxf eclipse-committers-2020-03-R-linux-gtk-x86_64.tar.gz -C /opt
+
+4、新建快捷方式
+# touch /usr/share/applications/eclipse.desktop
+
+5、输入快捷方式内容
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Eclipse 4.5.0
+Comment=Eclipse Mars
+Exec=/opt/eclipse/eclipse
+Icon=/opt/eclipse/icon.xpm
+Categories=Application;Development;Java;IDE
+Version=1.0
+Type=Application
+Terminal=0
+
+6、启动eclipse,为当前Eeclipse安装Java EE插件
+a. 在顶部菜单栏点击 Help -> Install New Software
+
+b. 在work with里边,输入2020-03，选择“2020-03 - http://download.eclipse.org/releases/2020-03”，eclipse会搜寻这个网址的所有软件，并且显示到下面的列表。
+
+c.展开 ”Web, XML, Java EE and OSGi Enterprise
+Development“选项，并且将下面四个选项打勾：
+
+Eclipse Java EE Developer Tools
+
+Eclipse Java Web Developer Tools
+
+Eclipse Web Developer Tools
+
+Eclipse XML Editors and Tools
+
+然后点击”Next“。
+
+
+d.在 “ Review licences”的窗口，在这个窗口选择
+“I accept the terms of the licence agreement” 并且点击“Finish”。
+
+
+e.然后Eclipse就会自己安装选择的插件，剩下就等待安装结束重启软件就可以了
+
+7、为eclipse配置tomcat
+a.tomcat 版本7
+b.目录为/usr/share/tomcat

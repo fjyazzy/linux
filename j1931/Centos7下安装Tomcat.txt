@@ -1,0 +1,10 @@
+1. rpm -qa |grep tomcat  ##通过rpm命令查看tomcat
+2. yum search tomcat |grep tomcat  ##检索可安装的tomcat包
+3. yum install tomcat tomcat-webapps tomcat-admin-webapps ##安装tomcat管理
+4. systemctl start tomcat  ##启动tomcat服务
+5. ifconfig  ##查找服务器IP地址
+6. systemctl stop firewalld.service   ##关闭防火墙
+   setenforce 0                       ###关闭  selinux
+7. http://192.168.190.148:8080/       ##访问网站
+8. 配置文件夹在 /etc/tomcat目录下
+9. systemctl restart tomcat  ##重启tomcat服务

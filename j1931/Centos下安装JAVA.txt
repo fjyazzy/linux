@@ -1,0 +1,20 @@
+1、centos7中安装java环境
+a. 在安装前先查看有无安装过java环境。直接运行java命令，会提示命令未找到，则是没有安装过java环境。
+或：
+也可以通过rpm命令查看：rpm -qa |grep java
+
+2、查看yum源的java包:  yum list java*
+===如遇到===================
+ Another app is currently holding the yum lock; waiting for it to exit...
+=============================
+ps aux | grep yum       //查看yum正在运行的进程
+kill -s 9 pid           //上一步找到pid后直接杀掉
+或
+rm -f /var/run/yum.pid  //通过强制关掉yum的进程
+===========================================
+
+3、安装java1.8 jdk软件
+yum -y install java-1.8.0-openjdk
+
+4、查看版本，检测是否安装成功
+java -version
