@@ -8,3 +8,4 @@
 7. http://192.168.190.148:8080/       ##访问网站
 8. 配置文件夹在 /etc/tomcat目录下
 9. systemctl restart tomcat  ##重启tomcat服务
+10.ps -f |grep tomcat   ##查tomcat进程
