@@ -1,0 +1,237 @@
+实训7：熟悉Linux网络命令
+
+实训任务：完成下面练习输入的内容！
+
+一、熟悉ifcfg系列命令
+
+ifcfg系命令包括ifconfig，route，netstat和hostname。
+
+1、ifconfig命令，用来配置一个网络接口。它的使用格式如下：
+a)：ifconfig [-a] [interface]
+   -a：表示显示所有的网络接口信息，包括inactive状态的接口
+
+练习输入:ifconfig -a
+
+b)：ifconfig IFACE（网络接口名，下同） IPADDR netmask NETMASK [up|down]
+表示通过ifconfig命令直接修改接口的ip地址和netmask，并可启停该接口。
+该命令会将配置参数立即送往内核中的TCP/IP协议栈，所以会立即生效，但是重启服务后会无效。
+
+练习输入:ifconfig eth1 172.16.7.14 netmask 255.255.0.0 练习输入: ifconfig eth1 172.16.7.14/16 down
+
+2、route命令
+
+显示和配置ip路由表。它的使用格式如下：
+
+a)：route [-n]
+
+表示查看全部的路由表,并以数字显示ip地址
+
+练习输入: route -n
+
+b)：route add [-net|-host] target [netmask Nm] [gw Gw] [[dev] If]
+
+添加相应接口的路由
+
+练习输入: route add -host 172.16.7.14 gw 172.16.0.1 dev eth1  #主机路由 
+练习输入: route add -net 172.16.7.0/24 gw 172.16.0.1 dev eth1  #网段路由 
+练习输入: route add default gw 172.16.0.1 dev eth1  #默认路由
+
+c)：route del [-net|-host] target [netmask Nm] [[dev] If]
+
+删除路由
+
+练习输入: route del -host 172.16.7.14 dev eth1   
+练习输入: route del -net 172.16.7.0/24 dev eth1 
+练习输入: route del default dev eth1
+
+3、netstat命令
+显示网络连接，路由表，接口状态等。它的使用格式如下：
+netstat [-n] [-r] [-p] [-e] [-a] [--tcp|-t] [--udp|-u] [--raw|-w] [--listening|-l] [-i] [-I<IFACE>] 
+-n：以数字格式显示ip和端口号，不做地址转换；
+-r：显示内核路由表
+-p：显示相关的进程和PID
+-e：显示扩展格式
+-a：显示所有的连接状态
+-t：显示tcp协议的相关连接的状态
+-u：显示udp协议的相关连接的状态
+-w：显示raw socket相关连接的状态
+-l：显示处于监听状态的连接
+-i：显示所有接口状态
+-I<IFACE>：显示特定的接口状态
+以上个选项可组合使用，常用组合有-tan，-uan，-tln，-uln，-tunlp等
+
+练习输入:  netstat -tan 
+练习输入:  netstat -Ieth1
+
+4、hostname命令
+
+显示配置主机名。它的使用格式如下：
+hostname：显示当前主机名
+hostname HOSTNAME：修改当前主机名为HOSTNAME，仅当前有效，重启无效。
+
+练习输入: hostname 
+练习输入: hostname TEST
+
+5、hostnamectl命令（CentOS7新增）
+
+显示配置主机名。它的使用格式如下：
+hostnamectl [status]：显示当前主机名信息
+hostnamectl set-hostname：设定主机名，永久有效
+
+练习输入: hostnamectl set-hostname CentOS7
+
+二、iproute2系命令
+
+iproute2系命令有ip link，ip addr，ip route，ip netns和ss等。
+
+1、ip link命令
+配置网络接口属性。它的使用格式如下：
+a)：ip link set [dev] IFACE [up|down] [multicast on|off] [name IFACE] [mtu NUMBER]
+up and down：启动或禁止选定的网络接口
+multicast on or multicast off：启动或禁止组播功能
+name NAME：重命名接口（命名前需先down掉接口）
+mtu NUMBER：设置接口的mtu大小，默认为1500
+
+练习输入: ip link set eth1 name eth2 up 
+练习输入: ip link set eth2 multicast off mtu 1000
+
+b)：ip link [show|list]
+显示全部网络接口的属性。
+
+练习输入: ip link show
+
+2、ip addr命令
+
+配置网络接口的ip地址。它的使用格式如下：
+a)：ip addr add IPADDR dev IFACE [label NAME] [broadcast ADDRESS] [scope SCOPE_VALUE] 
+增加一个ip地址。
+[label NAME]：为额外添加的地址指明接口别名
+[broadcast ADDRESS]：会根据ip和netmask自动计算，不用填
+[scope SCOPE_VALUE]：gloal全局可用；link接口可用；host：本机可用
+
+练习输入: ip addr add 172.16.7.14/24 dev eth1 label eth1:0
+
+b)：ip addr delete IPADDR dev IFACE 
+删除一个ip地址。
+
+练习输入: ip addr del 172.16.7.14/24 dev eth1:0
+
+c)：ip addr show [dev IFACE|label IFACE:#]
+仅显示指定的接口地址。
+
+练习输入: ip addr show label eth1:0 
+练习输入:  ip  addr  show  eth1
+
+d)：ip addr flush [dev] {IFACE|label IFACE:#}
+
+清空指定的所有地址或别名的地址。
+
+练习输入: ip addr flush label eth1:0 
+练习输入:  ip  addr  flush  eth1
+
+3、ip route命令
+
+配置接口的路由表信息。它的使用格式如下：
+
+a)：ip route add TYPE PREFIX（目标网络）via GateWay [dev IFACE] [src SOURCE_IP]
+
+添加路由表。 
+
+练习输入: ip route add 172.16.7.14 via 172.16.0.1 dev eth1 
+练习输入:  ip  route  add  172.16.7.0/24  via  172.16.0.1  dev  eth1 
+练习输入:  ip  route  add d efault  via  172.16.0.1  dev  eth1
+
+b)：ip route del TYPE PREFIX
+
+删除路由表。
+
+练习输入: ip route del 172.16.7.14 
+练习输入: ip route del 172.16.7.0/24
+
+c)：ip route show 
+
+显示路由表。
+
+练习输入: ip route show
+
+d)：ip route flush dev IFACE
+
+清空指定接口的所有路由表。
+
+练习输入: ip route flush dev  eth1
+
+4、ss命令
+
+和netstat命令一样用来查看网络状态，其选项参数和netstat命令基本相同，但是其查询速度比netstat命令要快。它的使用格式如下：
+ss [options] [filter]        
+filter：过滤器    FILTER := [ state TCP-STATE ] [ EXPRESSION ]
+选项：
+-t：TCP协议的相关连接
+-u：UDPF相关的连接
+-w：raw socket相关的连接
+-l：处于监听状态的连接
+-a：所有状态
+-n：以数字格式显示IP和Port
+-e：扩展格式
+-p：显示相关的进程及PID
+-m：内存用量
+-o：计时器信息
+EXPRESSION：
+dport：目标端口
+sport：源端口‘（ dport = ：22 or sport = ：22 ）’
+
+练习输入: ss -tan  #查看当前网络所以tcp的连接状态
+
+三、网络配置文件
+
+在CentOS系统上我们可以通过对修改不同的网络配置文件来使得配置网络接口的各种属性，不过要使其永久有效，还需使内核重读修改后的配置文件。
+
+1、IP/NETMASK/GW/DNS等属性的配置文件：
+其路径为：/etc/sysconfig/network-scripts/ifcfg-IFACE
+其格式为：
+DEVICE：此配置文件对应的设备的名称；
+ONBOOT：在系统引导过程中，是否激活此接口；
+NETBOOT：是否支持网络引导；
+UUID：设备的唯一标识；
+IPv6INT：是否初始化IPv6；
+BOOTPROTO：激活此接口时使用什么协议来配置属性，常用dhcp、bootp、static、none
+TYPE：接口类型，常见的有ethernet、bridge；
+DNS1：第一DNS服务器指向；
+DNS2：备用DNS服务器指向；
+DOMAIN：DNS搜索域；
+GATEWAY：默认网关；
+IPADDR：本机ip地址；
+NETMASK：子网掩码；CentOS7支持使用PREFIX以长度指明子网掩码；
+USERCTL：是否允许普通用户控制此设备；
+PEERDNS：如果BOOTPROTO的值为“dhcp”，是否运行dhcp server分配的dns服务器指向覆盖本地手动指定的DNS服务器指向；默认为允许
+HWADDR：设备的MAC地址；
+NM_CONTROLLED：是否使用NetworkManager服务来控制接口；
+network-scripts]# cat ifcfg-eth1 DEVICE="eth1" ONBOOT=yes NETBOOT=yes IPADDR=172.16.7.14 DNS=172.16.0.1 GATEWAY=172.16.0.1 NETMASK=255.255.0.0 IPV6INIT=no BOOTPROTO=none TYPE=Ethernet
+
+2、路由的相关配置文件：
+
+其路径为：/etc/sysconfig/network-scripts/route-IFACE
+其格式为：（不可混用）
+a)：每行一个路由条目：
+TARGET via GW
+b)：每三行一个路由条目：
+ADDRESS#=TARGET
+NETMASK#=MASK
+GATEWAY#=NEXTHOP
+network-scripts]# cat route-eth1  172.16.7.0/24 via 172.16.0.1
+
+3、主机名的相关配置文件：
+其路径为：/etc/sysconfig/network
+其格式为：
+HOSTNAME=<HOSTNAME>
+sysconfig]# cat network # Created by anaconda HOSTNAME=centos7.1
+
+4、DNS服务器指向配置文件：
+
+其路径为：/etc/resolv.conf
+其格式为：
+nameserver DNS_SERVER_IP
+etc]# cat resolv.conf 
+# Generated by NetworkManager
+search magelinux.com
+nameserver 172.16.0.1

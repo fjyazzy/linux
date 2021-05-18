@@ -1,0 +1,57 @@
+﻿实训一：在centos下安装Mysql
+
+在CentOS中默认安装有MariaDB，这个是MySQL的分支，但为了需要，还是要在系统中安装MySQL，而且安装完成之后可以直接覆盖掉MariaDB。
+一、 下载并安装
+
+1. 下载并安装MySQL官方的 Yum Repository
+[root@localhost ~]# wget -i -c http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm
+ 使用上面的命令就直接下载了安装用的Yum Repository，大概25KB的样子
+2. yum安装
+[root@localhost ~]# yum -y install mysql57-community-release-el7-10.noarch.rpm
+
+3. 安装MySQL服务器。
+[root@localhost ~]# yum -y install mysql-community-server
+这步可能会花些时间，安装完成后就会覆盖掉之前的mariadb。
+至此MySQL就安装完成。
+
+二、 MySQL数据库设置
+
+1.首先启动MySQL
+[root@localhost ~]# systemctl start  mysqld.service
+2.  查看MySQL运行状态：
+[root@localhost ~]# systemctl status mysqld.service
+此时MySQL已经开始正常运行，
+3. 进入MySQL还得先找出此时root用户的密码，通过如下命令可以在日志文件中找出密码：
+[root@localhost ~]# grep "password" /var/log/mysqld.log
+4. 进入数据库：
+[root@localhost ~]# mysql -uroot -p
+输入初始密码（是上面图片最后面的 no;e!5>>alfg），此时不能做任何事情，因为MySQL默认必须修改密码之后才能操作数据库：
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'new password';
+其中‘new password’替换成你要设置的密码，注意:密码设置必须要大小写字母数字和特殊符号（,/';:等）,不然不能配置成功
+
+ 
+三、 开启mysql的远程访问
+1. 执行以下命令开启远程访问限制（注意：下面命令开启的IP是 192.168.0.1，如要开启所有的，用%代替IP）：
+grant all privileges on *.* to 'root'@'192.168.0.1' identified by 'password' with grant option;
+然后再输入下面两行命令
+mysql> flush privileges; 
+mysql> exit
+
+2. 为firewalld添加开放端口
+添加mysql端口3306和Tomcat端口8080
+[root@localhost ~]# firewall-cmd --zone=public --add-port=3306/tcp --permanent
+[root@localhost ~]# firewall-cmd --zone=public --add-port=8080/tcp --permanent
+然后再重新载入
+[root@localhost ~]# firewall-cmd --reload
+ 
+3. 更改mysql的语言
+首先重新登录mysql，然后输入status：
+可以看到，绿色箭头处不是utf-8
+因此我们先退出mysql，然后再到、etc目录下的my.cnf文件下修改一下文件内容
+进入文件后，新增四行代码：
+保存更改后的my.cnf文件后，重启下mysql，然后输入status再次查看
+
+
+
+                                            
+
